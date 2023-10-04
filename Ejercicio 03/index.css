@@ -1,0 +1,159 @@
+
+body {
+    background-color: #161616;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    color: rgb(200, 200, 200);
+}
+
+:root{
+    scroll-behavior: smooth;
+}
+header {
+    background-color: #252525;
+    width: 100%;
+    top: 0;
+    left: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-container {
+    flex: 1;
+    margin: 0 20px;
+}
+
+.header-container h1 {
+    margin-top: 20px;
+    margin-bottom: 0;
+    font-size: 40px;
+}
+.header-container svg{
+    width: 40px;
+    height: 40px;
+}
+.svgs{
+    display: flex;
+    justify-content: space-between;
+    width: 100px;
+    margin-top: 10px;
+}
+
+a{
+    text-decoration: none;
+    color: rgb(200, 200, 200);
+}
+
+a:visited{
+    color: rgb(200, 200, 200);
+}
+
+a:hover{
+    color: brown;
+    transition: color 0.3s ease;
+}
+
+.icon{
+    fill: rgb(200, 200, 200);
+}
+
+a:hover .icon{
+    fill: brown;
+    transition: fill 0.3s ease;
+}
+
+.header-container h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.header-container p {
+    margin: 20px 0;
+}
+
+.header-container ol {
+    padding-left: 20px;
+}
+
+.header-container li{
+    margin-bottom: 10px;
+}
+
+.table-container {
+    padding: 40px;
+}
+
+.low-width{
+    width: 20%;
+}
+
+button{
+    display: block;
+    background-color: #161616;
+    border-style:solid;
+    border: 1px solid rgb(200, 200, 200);
+    height: 50px;
+    width: 50vh;
+    color: rgb(200, 200, 200);
+    margin: auto auto 25px auto;
+    cursor:pointer;
+    font-size: 20px;
+    font-weight: bold;
+}
+button:hover{
+    background-color: brown;
+    transition: background-color 0.3s ease;
+}
+table, th,td, tr{
+    border: 1px solid rgb(200, 200, 200);
+    border-collapse: collapse;
+}
+
+table{
+    margin: auto;
+}
+
+th{
+    font-size: 25px;
+    font-weight: bold;
+}
+
+td, th{
+    text-align: center;
+    padding: 0 40px;
+    height: 50px;
+}
+
+table ul{
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+    padding: 0;
+}
+
+.colors{
+    display: flex;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+.color{
+    display: flex;
+    width: 50px;
+    margin: 15px 15px;
+    border: 1px solid rgb(200, 200, 200);
+}
+.container{
+    margin: 0 10px;
+}
+
+.red{
+    background-color: #D44D5C;
+}
+.yellow{
+    background-color: yellow;
+}
+.green{
+    background-color: #32E875;
+}
