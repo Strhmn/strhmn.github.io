@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 04</title>
+
+    <style>
+        body {
+            background-color: black;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+            font-family: 'IBM', monospace;
+            color: rgb(31, 31, 31);
+        }
+
+        h1,
+        h2 {
+            margin: 0;
+
+        }
+
+        ul {
+            padding-inline-start: 15px;
+            list-style-type: disc;
+            list-style-position: outside;
+            margin-left: 20px;
+            padding-left: 0;
+        }
+
+        ul li {
+            margin: 7px 0;
+        }
+
+        ol {
+            margin: 0;
+            font-size: 23px;
+        }
+
+        /* Modal */
+
+        .background-modal {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            position: absolute;
+            height: 100vh;
+            width: 100vw;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .show-background {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            background-color: rgb(235, 235, 235);
+            width: 30%;
+            min-width: 410px;
+            max-width: 440px;
+            border-radius: 10px;
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+            transform: scale(0);
+            transition: transform 0.3s ease;
+        }
+
+
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgb(31, 31, 31);
+            height: 45px;
+            width: 100%;
+        }
+
+        .modal-body {
+            display: flex;
+            padding: 0 25px;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .modal-body h1 {
+            margin: 20px 0;
+        }
+
+        .input {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+
+        .input input {
+            height: 35px;
+            width: 65%;
+            border-style: none;
+            border-radius: 10px;
+            border: 2px solid rgb(31, 31, 31);
+            font-size: 17px;
+            font-weight: 600;
+            text-align: center;
+
+        }
+
+        .input input:focus-visible {
+            outline: 0;
+        }
+
+        .input button {
+            width: 30%;
+            cursor: pointer;
+            border-style: none;
+            border-radius: 10px;
+            background-color: rgb(31, 31, 31);
+            color: rgb(235, 235, 235);
+            font-size: 15px;
+        }
+
+        .close-button h1 {
+            margin: 0;
+            font-size: 25px;
+        }
+
+        .close-button {
+            height: 100%;
+            width: 15%;
+            padding: 0;
+            border-top-right-radius: 9px;
+            background-color: rgb(235, 235, 235);
+            border-style: none;
+        }
+
+        .close-button:hover {
+            background-color: rgb(31, 31, 31);
+            color: rgb(235, 235, 235);
+            cursor: pointer;
+        }
+
+
+
+
+        .modal-header h2 {
+            margin: 15px;
+        }
+
+        /* Preguntas */
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            transform: scale(0);
+            transition: transform 1s ease;
+        }
+
+        .questions {
+            padding: 20px 30px 0;
+            overflow: auto;
+            border-radius: 10px;
+            max-height: 918px;
+            background-color: rgb(235, 235, 235);
+            width: 50%;
+            box-shadow: 0 0 90px;
+
+        }
+
+        .ol-li {
+            margin: 25px 0;
+        }
+
+        .error-input {
+            color: red;
+            margin: 0;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+
+        /* Respuesta */
+
+        .container-answer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 15px;
+        }
+
+        .answer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px;
+        }
+
+        #button-start {
+            background: black;
+            cursor: pointer;
+            border: none;
+            padding: 15px;
+            height: 25%;
+            width: 25%;
+            color: rgb(235, 235, 235);
+            font-size: 24px;
+            font-weight: bold;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .content {
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .show-content {
+            opacity: 1;
+        }
+
+        /* Idea de animacion de fondo inspirado en [https://www.youtube.com/shorts/QR8CVkmJhLU] */
+
+        .animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #e81123d2, blue, #e81123d2, blue, #e81123d2, blue, #e81123d2, blue);
+            background-size: 800%;
+            animation: glowing 2.5s linear infinite;
+        }
+
+        @keyframes glowing {
+            0% {
+                background-position: 0 0;
+            }
+
+            100% {
+                background-position: 35% 0;
+            }
+        }
+
+        .show {
+            transform: scale(1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="animation">
+
+        <div class="background-modal cls">
+            <div class="modal">
+
+                <div class="modal-header">
+                    <h2>
+                        Formulario Modal
+                    </h2>
+
+                    <button class="close-button cls">
+                        <h1>X</h1>
+                    </button>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <h1>
+                        Introduzca un numero
+                    </h1>
+
+                    <div class="input">
+                        <input type="text">
+                        <button>Confirmar</button>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+        <div class="container">
+            <div class="questions">
+                <div>
+                    <h1 class="content" style="font-size: 65px;">Ejercicio 04: Modal</h1>
+                    <h1 class="content" style="font-size: 3em; letter-spacing: 0em; line-height: 1.5;">Consigna:</h1>
+                    <ol class="content">
+                        <li class="ol-li content">Estructura del Modal:
+                            <ul>
+                                <li class="content">Crea un modal con un input de tipo numérico y un botón de
+                                    confirmación.</li>
+                            </ul>
+                        </li>
+
+                        <li class="ol-li content">
+                            Funcionalidad del Botón:
+                            <ul>
+                                <li class="content">Utiliza JavaScript para detectar el clic en el botón de confirmación
+                                    dentro del
+                                    modal.
+                                </li>
+                            </ul>
+
+                            <ul>
+                                <li class="content">Cuando se hace clic en el botón de confirmación, lee el valor del
+                                    input numérico
+                                    ingresado por el usuario.</li>
+                            </ul>
+                        </li>
+
+                        <li class="ol-li content">
+                            Mostrar y Cerrar el Modal:
+                            <ul>
+                                <li class="content">Muestra el número ingresado por el usuario en un elemento HTML.</li>
+                            </ul>
+
+                            <ul>
+                                <li class="content">Cierra el modal después de mostrar el número.</li>
+                            </ul>
+                        </li>
+                    </ol>
+
+
+                </div>
+
+                <hr class="content">
+
+                <div class="container-answer">
+                    <button class="content cls" id="button-start">Empezar</button>
+                </div>
+                <div class="answer">
+
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+
+
+    <script>
+
+        const closeModalElements = document.querySelectorAll('.cls')
+
+        const contentToShow = document.querySelectorAll('.content') // Todos los elementos que pasan de opacidad 0 a 1
+
+        const modalBody = document.querySelector('.modal-body')
+
+        const confirmButton = document.querySelector('.input button')
+
+        const answerContainer = document.querySelector('.answer')
+
+
+        const backgroundModal = document.querySelector('.background-modal')
+        const modal = document.querySelector('.modal')
+
+        const input = document.querySelector('input')
+
+        let paragraph = null
+
+        confirmButton.disabled = true;
+
+
+        // Mostrar u ocultar modal
+
+        let toggleModal = () => {
+
+            backgroundModal.classList.toggle('show-background')
+            modal.classList.toggle('show')
+
+        }
+
+        // Asignacion de evento a elementos para cerrar el modal
+
+        closeModalElements.forEach(element => {
+
+            element.addEventListener('click', () => {
+
+                toggleModal()
+
+                input.value = null
+                confirmButton.disabled = true
+
+                if (paragraph != null) {
+
+                    modalBody.removeChild(paragraph)
+                    paragraph = null
+
+                }
+
+            })
+
+        })
+
+        // Evento input para evaluar el valor que se esta introduciendo en el elemento input 
+
+        input.addEventListener('input', () => {
+
+            if (input.value != '') {
+
+                if (!isNaN(input.value)) {
+
+                    confirmButton.disabled = false;
+
+                    if (paragraph != null) {
+                        modalBody.removeChild(paragraph)
+                        paragraph = null
+                    }
+
+                }
+                else {
+
+                    confirmButton.disabled = true;
+
+                    if (paragraph == null) {
+                        modalBody.insertAdjacentHTML("beforeend", "<p class='error-input'> ERROR: Valor no numerico detectado </p>")
+                        paragraph = document.querySelector('.error-input')
+                    }
+
+                }
+
+                return
+
+            }
+
+            confirmButton.disabled = true
+
+        })
+
+        // Evento click en boton confirmar
+
+        confirmButton.addEventListener('click', () => {
+
+            answerContainer.innerHTML = ""
+            answerContainer.insertAdjacentHTML("beforeend", "<h2>Valor numerico ingresado: " + input.value + "</h2>")
+
+            toggleModal()
+
+        })
+
+
+        // Sin este codigo de abajo el modal se cerraba sin importar donde se haga click
+
+        modal.addEventListener('click', (event) => {
+
+            event.stopPropagation()
+
+        })
+
+        // Escalar contenido principal de 0 a 1
+
+        setTimeout(() => {
+
+            document.querySelector('.container').classList.add('show')
+
+        }, 100)
+
+        // Cambiar opacidad los elementos del array contentToShow de 0 a 1 en un intervalo de 125ms
+
+        let index = 0
+
+        let y = () => {
+
+            contentToShow[index].classList.add('show-content')
+            index++
+            x()
+
+        }
+
+        let x = () => {
+
+            if (index < contentToShow.length) setTimeout(y, 125)
+
+        }
+
+        setTimeout(x, 650) // Comienzo 
+        
+        //////////////////////////////////
+
+        /* [https://github.com/Strhmn] */ 
+
+        //////////////////////////////////
+
+    </script>
+
+
+
+</body>
+
+</html>
